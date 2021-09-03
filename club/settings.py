@@ -56,7 +56,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
+                "django.template.context_processors.de /godmode/dev_login/bug",
                 "django.template.context_processors.request",
                 "club.context_processors.settings_processor",
                 "club.context_processors.data_processor",
@@ -154,7 +154,7 @@ APP_HOST = os.environ.get("APP_HOST") or "http://127.0.0.1:8000"
 APP_NAME = "Вастрик.Клуб"
 APP_DESCRIPTION = "Всё интересное происходит за закрытыми дверями"
 LAUNCH_DATE = datetime(2020, 4, 13)
-
+https://github.com/incmisis/incmisis.club
 AUTH_CODE_LENGTH = 6
 AUTH_CODE_EXPIRATION_TIMEDELTA = timedelta(minutes=15)
 AUTH_MAX_CODE_TIMEDELTA = timedelta(hours=1)
@@ -210,7 +210,7 @@ MAILGUN_API_URI = "https://api.eu.mailgun.net/v3/incmisis.ru"
 MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
 MAILGUN_EMAIL_FROM = "Inc Club <club@incmisis.ru>"
 
-MEDIA_UPLOAD_URL = "https://i.vas3k.club/upload/multipart/"
+MEDIA_UPLOAD_URL = "http://0.0.0.0:8118/upload/multipart/"
 MEDIA_UPLOAD_CODE = os.getenv("MEDIA_UPLOAD_CODE")
 VIDEO_EXTENSIONS = {"mp4", "mov", "webm"}
 IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
