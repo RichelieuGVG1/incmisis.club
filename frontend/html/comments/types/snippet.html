@@ -1,0 +1,27 @@
+{% load text_filters %}
+{% load comments %}
+<div class="comment comment-layout-normal {% if comment.is_pinned %}comment-is-pinned{% endif %}">
+    <div class="comment-header">
+        <div class="user user-small">
+            <span class="avatar user-avatar">
+                <img src="{{ comment.author.get_avatar }}" alt="Аватар {{ comment.author.full_name }}" loading="lazy" />
+            </span>
+            <span class="user-info">
+                <span>
+                    <a href="{% url "profile" comment.author.slug %}" class="user-name">{{ comment.author.full_name }}</a>
+                    на пост
+                    <a href="{% url "show_post" comment.post.type comment.post.slug %}#comment-{{ comment.id }}" class="user-name-post">{{ comment.post.title }}</a>
+                </span>
+            </span>
+            <span class="user-footer">{{ comment.created_at | cool_date }}</span>
+        </div>
+    </div>
+    <div class="comment-rating">
+        <span class="upvote upvote-disabled upvote-type-small">{{ comment.upvotes }}</span>
+    </div>
+    <div class="comment-body">
+        <div class="text-body text-body-type-comment">
+            {% render_comment comment %}
+        </div>
+    </div>
+</div>

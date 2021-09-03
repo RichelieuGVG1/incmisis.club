@@ -1,0 +1,249 @@
+{% extends "emails/layout.html" %}
+{% load static %}
+{% load text_filters %}
+{% load comments %}
+{% load users %}
+{% load emails %}
+
+{% block css %}
+<style>
+    h1, h2, header {
+        text-align: center;
+    }
+
+    .achievement {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 15px 7px 10px;
+        color: #FFF;
+        text-decoration: none;
+        font-size: 100% !important;
+        border-radius: 20px;
+    }
+
+        .achievement-image {
+            display: inline-block;
+            height: 35px;
+            width: 35px;
+            min-width: 35px;
+            vertical-align: middle;
+        }
+</style>
+{% endblock %}
+
+{% block logo %}
+    <a href="https://vas3k.club">
+        <center><img src="{{ settings.APP_HOST }}{% static "images/logo/logo-256.png" %}" alt="" height="80" width="80" style="display:inline-block;width: 80px;height: 80px;min-width: 80px; margin-top: 30px;"></center>
+    </a>
+{% endblock %}
+
+{% block title %}
+    Журнал Вастрик.Клуба<br>
+    <span class="issue">Итоги недели. Выпуск #{{ issue_number }}</span>
+{% endblock %}
+
+{% block body %}
+    {% if author_intro %}
+        <div class="editorial">
+            {{ author_intro | email_markdown }}
+        </div>
+    {% endif %}
+
+    {% if intros %}
+        <h2>🤘 Новенькие</h2>
+
+        <div class="center editorial">
+            На этой неделе у нас <strong><a href="{% url "people" %}">+{{ newbie_count }} {{ newbie_count|rupluralize:"новый член,новых члена,новых членов" }} Клуба</a></strong>.
+            Вот самые интересные из них, набравшие больше всего плюсиков за своё #intro.
+            Не стесняйтесь писать им комменты и расспрашивать за жизнь. Для того мы здесь и собрались!
+        </div>
+
+        {% for intro in intros|slice:":3" %}
+            <div class="block user">
+                <div class="user-avatar" style="background-image: url('{{ intro.author.get_avatar }}');">&nbsp;</div>
+
+                <div>
+                    <h3>
+                        <a href="{{ settings.APP_HOST }}{% url "profile" intro.author.slug %}" style="text-decoration: underline;">{{ intro.author.full_name }}</a> &nbsp;&nbsp;{% user_tag_images intro.author %}<br>
+                        <span class="user-title-small">{{ intro.author.position }}{% if intro.author.company %} — {{ intro.author.company }}{% endif %}</span>
+                    </h3>
+
+                    <p>{{ intro.text | markdown | truncatechars:400 }}</p>
+
+                    <span>
+                        <a href="{{ settings.APP_HOST }}{% url "show_post" "intro" intro.slug %}">Читать всё #intro &rarr;</a>
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if featured_post %}
+        <br><br><br>
+
+        <h2>🚀 Тема недели</h2>
+
+        <div class="block post">
+            <h3>
+                {{ featured_post.prefix }}
+                <a href="{{ settings.APP_HOST }}{% url "show_post" featured_post.type featured_post.slug %}" target="_blank">{{ featured_post.title }}</a>
+            </h3>
+
+            <p>
+                {{ featured_post.text | markdown | striptags | truncatechars:400 }}
+            </p>
+
+            <span class="post-footer">
+                <a href="{{ settings.APP_HOST }}{% url "profile" featured_post.author.slug %}" style="text-decoration: none; color: #999;">
+                    <img src="{{ featured_post.author.get_avatar }}" alt="" width="24" height="24" class="avatar-small">
+                    &nbsp;{{ featured_post.author.full_name }}
+                </a>
+                | {{ featured_post.view_count }}&nbsp;{{ featured_post.view_count | rupluralize:"просмотр,просмотра,просмотров" }}
+                | {{ featured_post.comment_count }}&nbsp;{{ featured_post.comment_count | rupluralize:"комментарий,комментария,комментариев" }}
+            </span>
+        </div>
+    {% endif %}
+
+    {% if posts %}
+        <br><br><br>
+
+        <h2>😎 Лучшие посты</h2>
+
+        <p class="center editorial">
+            Всего за неделю написали <strong><a href="{% url "feed_ordering" "all" "top_week" %}">{{ post_count }} {{ post_count | rupluralize:"пост,поста,постов" }}</a></strong>.
+            Вот самые популярные из них.
+        </p>
+
+        {% for post in posts %}
+            <div class="block post">
+                <span class="upvotes">
+                    👍{{ post.upvotes }}
+                </span>
+
+                <h3>
+                    {% if post.type != "post" %}
+                        {{ post.emoji }}
+                    {% endif %}
+
+                    {{ post.prefix }}
+
+                    <a href="{{ settings.APP_HOST }}{% url "show_post" post.type post.slug %}" target="_blank">{{ post.title }}</a>
+
+                    {% if post.label %}
+                        &nbsp;{% include "posts/widgets/label.html" with label=post.label %}
+                    {% endif %}
+                </h3>
+
+                <p>
+                    {{ post.text | markdown | striptags | truncatechars:400 }}
+                </p>
+
+                <span class="post-footer">
+                    <a href="{{ settings.APP_HOST }}{% url "profile" post.author.slug %}" style="text-decoration: none; color: #999;">
+                        <img src="{{ post.author.get_avatar }}" alt="" width="24" height="24" class="avatar-small">
+                        &nbsp;{{ post.author.full_name }}
+                    </a>
+                    | {{ post.view_count }}&nbsp;{{ post.view_count | rupluralize:"просмотр,просмотра,просмотров" }}
+                    | {{ post.comment_count }}&nbsp;{{ post.comment_count | rupluralize:"комментарий,комментария,комментариев" }}
+                </span>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if comments %}
+        <br><br><br>
+
+        <h2>💭 Топ комментариев</h2>
+
+        {% for comment in comments %}
+            <div class="block comment">
+                <span class="upvotes">
+                    👍{{ comment.upvotes }}
+                </span>
+                <div>
+                    <a href="{{ settings.APP_HOST }}{% url "profile" comment.author.slug %}" style="text-decoration: none;">
+                        <img src="{{ comment.author.get_avatar }}" alt="" width="24" height="24" class="avatar-small">
+                        &nbsp;{{ comment.author.full_name }}
+                    </a>
+                    на {{ comment.post.prefix|default:"пост"|lower }}
+                    <a href="{% url "show_post" comment.post.type comment.post.slug %}#comment-{{ comment.id }}">{{ comment.post.title }}</a>
+                </div>
+                <div>
+                    {% render_email comment %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if achievements %}
+        <br><br><br>
+
+        <h2>🎖 Награды</h2>
+
+        <div class="block comment" style="font-size: 20px; text-align: center;">
+            {% regroup achievements by achievement as achievement_groups %}
+            {% for achievement_group in achievement_groups %}
+                <p>
+                    {% for achievement in achievement_group.list %}<img src="{{ achievement.user.get_avatar }}" alt="" width="24" height="24" class="avatar-small">&nbsp;<a href="{% url "profile" achievement.user.slug %}">{{ achievement.user.full_name }}</a>{% if forloop.revcounter0 == 1 %} и {% else %}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}
+                    {% if achievement_group.list|length == 1 %}получил{% else %}получили{% endif %} ачивку <a href="{% url "achievements" %}" class="achievement" style="{{ achievement_group.grouper.style }}"><img src="{{ achievement_group.grouper.image }}" alt="" height="35" width="35" class="achievement-image">&nbsp;{{ achievement_group.grouper.name }}</a>
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if top_video_comment or top_video_post %}
+        <br><br><br>
+
+        <h2>🎥 Видосик недели</h2>
+
+        {% if top_video_comment %}
+            <div class="block comment">
+                <div>
+                    <a href="{{ settings.APP_HOST }}{% url "profile" top_video_comment.author.slug %}" style="text-decoration: none;">
+                        <img src="{{ top_video_comment.author.get_avatar }}" alt="" width="24" height="24" class="avatar-small">
+                        &nbsp;{{ top_video_comment.author.full_name }}
+                    </a>
+                    на {{ top_video_comment.post.prefix|default:"пост"|lower }}
+                    <a href="{% url "show_post" top_video_comment.post.type top_video_comment.post.slug %}#comment-{{ top_video_comment.id }}">{{ top_video_comment.post.title }}</a>
+                </div>
+                <div>
+                    {% render_email top_video_comment %}
+                </div>
+            </div>
+        {% elif top_video_post %}
+            <div class="block post">
+                <h3>
+                    <a href="{{ settings.APP_HOST }}{% url "show_post" top_video_post.type top_video_post.slug %}" target="_blank">{{ top_video_post.title }}</a>
+                    {% if top_video_post.label %}
+                        &nbsp;{% include "posts/widgets/label.html" with label=top_video_post.label %}
+                    {% endif %}
+                </h3>
+                <p>
+                    <a href="{{ top_video_post.url }}">
+                        <span class="ratio-16-9 video-preview" style="background-image: url('https://img.youtube.com/vi/{{ top_video_post.url | youtube_id }}/0.jpg');"></span>
+                    </a>
+                </p>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <br>
+
+    <h2>На этом всё 👋</h2>
+
+    <div class="center editorial">
+        Услышимся в журнале через неделю. Приносите годные ссылочки, пишите посты и палите инсайды.
+        Только вместе мы делаем Клуб таким полезным и охуенным!
+    </div>
+
+    <br><br><br>
+{% endblock %}
+
+{% block footer %}
+    <p>
+        Напоминаем, что вы всегда можете <a href="{{ settings.APP_HOST }}/notifications/switch/daily/%user_id%/%secret_code%/">перейти на ежедневный дайджест</a> чтобы получать контент чаще или <a href="{{ settings.APP_HOST }}/notifications/switch/nope/%user_id%/%secret_code%/">вообще отписаться от них</a> и жить в темноте и грусти.
+    </p>
+{% endblock %}
+
+{% block unsubscribe %}
+{% endblock %}

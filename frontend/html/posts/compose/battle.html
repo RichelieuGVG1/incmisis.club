@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if mode == "edit" %}
+        Редактируем батл — {{ block.super }}
+    {% else %}
+        Новый батл — {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="content compose">
+        {% if mode == "create" %}
+            <div class="content-header">Новый батл</div>
+        {% else %}
+            <div class="content-header">Батл</div>
+        {% endif %}
+
+        {% if mode == "create" %}
+            <div class="content-description">
+                <p>
+                    Батл — это схватка двух крайностей.
+                </p>
+                <p>
+                    В нём мы пытаемся выделить аргументы каждой из сторон чтобы потом составить по ним свою картину мира.
+                </p>
+                <p>
+                    Старайтесь как можно четче называть стороны и написать хороший проясняющий текст.
+                </p>
+
+                <p>
+                    🚨 <strong>В батлах ужесточена модерация.</strong>
+                    Мусорных батлов стало слишком много.
+                    Отныне если батл не крутой — его скорее всего сразу удалят.
+                </p>
+
+                <p>
+                    ❌ <strong>Батлы с частицей «не» в названии удаляются в 99% случаев</strong>. Для тем «делать или НЕ делать» лучше <a href="{% url "compose_type" "question" %}">задать вопрос</a>.
+                </p>
+            </div>
+        {% endif %}
+
+        <div class="block compose-text">
+            <form action="." method="post" class="compose-form" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-row form-row-center">
+                    {{ form.topic }}
+                    {% if form.topic.errors %}<span class="form-row-errors">{{ form.topic.errors }}</span>{% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.side_a.id_for_label }}" class="form-label">Стороны батла</label>
+                    <div class="form-row-center">
+                        {{ form.side_a }} <span class="compose-vs">vs</span> {{ form.side_b }}
+                    </div>
+                    {% if form.side_a.errors %}<span class="form-row-errors">{{ form.side_a.errors }}</span>{% endif %}
+                    {% if form.side_b.errors %}<span class="form-row-errors">{{ form.side_b.errors }}</span>{% endif %}
+                </div>
+
+                <div class="form-row compose-form-text">
+                    <label for="{{ form.text.id_for_label }}" class="form-label">{{ form.text.label }}</label>
+                    {{ form.text }}
+                    {% if form.title.errors %}<span class="compose-form-errors">{{ form.title.errors }}</span>{% endif %}
+                    <span class="form-row-help form-row-help-wide">Можно использовать <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a></span>
+                </div>
+
+                {% include "posts/compose/elements/post_settings.html" %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-row form-row-center">
+                        {% for error in form.non_field_errors %}
+                            <span class="form-row-errors">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% include "posts/compose/elements/save_buttons.html" %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

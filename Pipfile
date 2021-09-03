@@ -1,0 +1,47 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+pytest = "*"
+django-debug-toolbar = "*"
+
+[packages]
+django = "==3.1"
+requests = "==2.23.0"
+pyjwt = "==1.7.1"
+cryptography = "==2.8"
+patreon = ">=0.5"
+sentry-sdk = ">=0.16.5"
+psycopg2-binary = "==2.8.4"
+awesome-slugify = ">=1.6.5"
+mistune = "==2.0.0a4"
+click = "*"
+pillow = ">=7.1.1"
+django-simple-history = ">=2.8.0"
+python-telegram-bot = "==12.5.1"
+django-q = {extras = ["sentry"],version = "*"}
+redis = ">=3.4.1"
+python-dotenv = ">=0.12"
+newspaper3k = ">=0.2.8"
+django-redis = "==4.11.0"
+nltk = "==3.4.5"
+gunicorn = "==20.0.4"
+uvicorn = "*"
+uvloop = "*"
+premailer = "==3.6.1"
+django-webpack-loader = "*"
+typus = "*"
+gdal = ">=2.4.0"
+stripe = "==2.55.0"
+icalendar = "*"
+httptools = "*"
+croniter = "*"
+
+[requires]
+python_version = "3.8"
+
+[scripts]
+nltk_download = "python -m nltk.downloader all"

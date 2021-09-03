@@ -1,0 +1,37 @@
+{% load text_filters %}
+<article class="block profile-card h-card">
+    <div class="profile-card-photo u-photo">
+        <div class="avatar profile-user-avatar"><img src="{{ user.get_avatar }}" alt="Аватар {{ user.full_name }}" loading="lazy" /></div>
+    </div>
+    <div class="profile-card-info">
+        <a href="{% url "profile" user.slug %}" class="profile-user-name u-url">
+            <span class="profile-user-fullname {% if user.is_banned or user.deleted_at %}user-name-is-banned{% endif %} p-name">{{ user.full_name }}</span>
+            <span class="profile-user-nickname p-nickname">@{{ user.slug }}</span>
+        </a>
+
+        {% if user.position or user.company %}
+            <div class="profile-user-job">
+                <span class="profile-user-job-position p-job-title">{{ user.position }}</span>
+                {% if user.company %}— <span class="profile-user-job-company p-org">{{ user.company }}</span>{% endif %}
+            </div>
+        {% endif %}
+
+        {% if user.city or user.country %}
+            <div class="profile-user-location">
+                📍{% if user.city %}<span class="p-locality">{{ user.city }}</span>, {% endif %}<span class="p-country-name">{{ user.country }}</span>
+            </div>
+        {% endif %}
+
+        {% if user.hat %}
+            <div class="profile-user-hat">
+                {% include "users/widgets/hat.html" with hat=user.hat %}
+            </div>
+        {% endif %}
+
+        {% if user.bio %}
+            <div class="profile-user-bio">
+                {{ user.bio | markdown }}
+            </div>
+        {% endif %}
+    </div>
+</article>

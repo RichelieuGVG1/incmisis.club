@@ -1,0 +1,44 @@
+{% load text_filters %}
+{% load posts %}
+{% load comments %}
+<div class="reply {% if comment.created_at > post_last_view_at %}comment-is-new{% endif %}" id="comment-{{ comment.id }}">
+    <div class="reply-author">
+        <a class="avatar user-avatar" href="{% url "profile" comment.author.slug %}">
+            <img src="{{ comment.author.get_avatar }}" alt="Аватар {{ comment.author.full_name }}" loading="lazy" />
+        </a>
+    </div>
+    <div class="reply-body">
+        <div class="text-body text-body-type-comment">
+            {% render_comment comment %}
+        </div>
+    </div>
+    <div class="reply-rating">
+        <comment-upvote :initial-upvotes="{{ comment.upvotes }}"
+                         :hours-to-retract-vote="{{settings.RETRACT_VOTE_IN_HOURS}}"
+                         upvote-url="{% url "upvote_comment" comment.id %}"
+                         retract-vote-url="{% url "retract_comment_vote" comment.id %}"
+                         {% if comment.is_voted %}
+                            initial-is-voted
+                            initial-upvote-timestamp="{{comment.upvoted_at}}"
+                         {% endif %}
+                         {% if not me|can_upvote:comment or upvote_disabled %}is-disabled{% endif %}
+                         is-inline>
+        </comment-upvote>
+    </div>
+    <div class="reply-footer">
+        <span class="comment-reply-button" v-on:click="showReplyForm('{{ reply_to.id }}', '{{ comment.author.slug }}', true)">
+            —&nbsp;&nbsp;{{ comment.author.slug }}&nbsp;&nbsp;<i class="fas fa-reply"></i>
+        </span>
+
+        <a href="#comment-{{ comment.id }}" class="comment-reply-date">
+            {{ comment.created_at | cool_date }}
+        </a>
+
+        {% if me == comment.author or me == comment.post.author or me.is_moderator %}
+            <a href="{% url "edit_comment" comment.id %}" class="comment-edit-button reply-button-hidden"><i class="fas fa-edit"></i></a>
+            {% if not comment.is_deleted %}
+                <a href="{% url "delete_comment" comment.id %}" class="comment-edit-button reply-button-hidden" onclick="return confirm('Удаляем?')"><i class="fas fa-trash"></i></a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load posts %}
+
+{% block title %}
+    {% if post %}
+        {% if post.prefix %}{{ post.prefix }} {% endif %}{{ post.title }}{% if post.topic %} [{{ post.topic.name }}]{% endif %} — {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block og_tags %}
+    {% if post %}
+        <meta property="og:title" content="{% if post.prefix %}{{ post.prefix }} {% endif %}{{ post.title }} — {{ settings.APP_NAME }}">
+        <meta property="og:site_name" content="{{ settings.APP_NAME }}">
+        <meta property="og:url" content="{{ settings.APP_HOST }}">
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="{{ post.description | truncatechars:100 }}">
+        <meta property="og:image" content="{{ post | any_image }}">
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="{% if post.prefix %}{{ post.prefix }} {% endif %}{{ post.title }} — {{ settings.APP_NAME }}">
+        <meta name="twitter:description" content="{{ post.description | truncatechars:100 }}">
+        <meta name="twitter:image" content="{{ post | any_image }}">
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="block access-denied">
+        <h2>Эта страница доступна только участникам Клуба 🎩</h2>
+
+        <p>
+            Иногда надо закрыть дверь, чтобы поговорить открыто.
+            Вот <a href="{% url "docs" "about" %}">чуть подробнее</a> о том, что здесь происходит.
+        </p>
+
+        <p>
+            <br>
+            <a href="{% url "login" %}?goto={{ settings.APP_HOST }}{{ request.path }}" class="button">Войти</a>&nbsp;&nbsp;или&nbsp;&nbsp;<a href="{% url "join" %}" class="button">Вступить в Клуб</a>
+        </p>
+    </div>
+{% endblock %}

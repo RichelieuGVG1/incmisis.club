@@ -1,0 +1,144 @@
+{% extends "posts/show/layout.html" %}
+{% load static %}
+{% load posts %}
+{% load battle %}
+{% load text_filters %}
+
+{% block post %}
+    <div class="battle-header">
+        {% if post.topic %}
+            <div class="battle-header-topic">
+                {% include "posts/widgets/topic.html" with topic=post.topic type="post" %}
+            </div>
+        {% endif %}
+
+        {% if post.deleted_at %}
+            <div class="post-label">
+                <span class="label label-type-deleted">
+                    <span class="label-title">Удалённый пост</span>
+                </span>
+            </div>
+        {% elif not post.is_visible %}
+            <div class="post-label">
+                {% include "posts/widgets/draft_label.html" %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="battle-title-main">
+        <div class="block battle-title p-name">
+            <div class="battle-title-side-a">
+                <div>{{ post.metadata.battle.sides.a.name | rutypography }}</div>
+            </div>
+            <div class="battle-title-vs">
+                <div class="battle-title-vs-text">или</div>
+            </div>
+            <div class="battle-title-side-b">
+                <div>{{ post.metadata.battle.sides.b.name | rutypography }}</div>
+            </div>
+        </div>
+
+        <div class="post-date">
+            <span class="post-is-public">
+                {% if post.is_public %}
+                    <i class="fas fa-globe-americas"></i>&nbsp;Публичный пост&nbsp;&nbsp;&nbsp;
+                {% else %}
+                    <i class="fas fa-lock"></i>&nbsp;Только для своих&nbsp;&nbsp;&nbsp;
+                {% endif %}
+            </span>
+            {{ post.effective_published_at|date:"j E Y" }}&nbsp;&nbsp;&nbsp;
+            <i class="fas fa-eye"></i>&nbsp;{{ post.view_count }}&nbsp;&nbsp;&nbsp;
+            {% if me %}
+                <post-bookmark
+                    bookmark-url="{% url "toggle_post_bookmark" post.slug %}"
+                    {% if is_bookmark %}
+                        initial-is-bookmarked
+                    {% endif %}>
+                </post-bookmark>
+            {% endif %}
+            {% if post.author == me or me.is_moderator %}
+                <a href="{% url "edit_post" post.slug %}"><i class="fas fa-edit"></i>&nbsp;Править&nbsp;&nbsp;&nbsp;</a>
+            {% endif %}
+            {% include "posts/widgets/delete_restore.html" %}
+            {% if me.is_moderator %}
+                <a href="{% url "announce_post" post.slug %}"><i class="fas fa-bullhorn"></i></a>&nbsp;&nbsp;&nbsp;
+                <a href="{% url "admin_post" post.slug %}"><i class="fas fa-tools"></i></a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="block post post-layout-block post-type-battle">
+            <div class="post-upvote">
+                <post-upvote :initial-upvotes="{{ post.upvotes }}"
+                             :hours-to-retract-vote="{{settings.RETRACT_VOTE_IN_HOURS}}"
+                             upvote-url="{% url "upvote_post" post.slug %}"
+                             retract-vote-url="{% url "retract_post_vote" post.slug %}"
+                             {% if is_voted %}
+                                initial-is-voted
+                                initial-upvote-timestamp={{upvoted_at}}
+                             {% endif %}
+                             {% if not me|can_upvote:post or upvote_disabled %}is-disabled{% endif %}>
+                </post-upvote>
+                <div class="clearfix20"></div>
+            </div>
+            <div class="text-body text-body-layout-notitle text-body-type-post e-content">
+                {% render_post post %}
+            </div>
+            <div class="post-footer">
+                <div class="p-author">
+                    {% include "users/widgets/small.html" with user=post.author created_at=post.created_at %}
+                </div>
+            </div>
+        </div>
+        {% if linked_posts %}
+            {% include "posts/widgets/linked_posts.html" %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block comments %}
+    <div class="post-comments" id="comments">
+        {% if me %}
+            <post-subscription
+                url="{% url "toggle_post_subscription" post.slug %}"
+                {% if subscription %}is-active-by-default{% endif %}
+                class="post-comments-subscription"
+                style="margin-left: 0;"
+            >
+            </post-subscription>
+        {% endif %}
+
+        {% battle_stats post comments %}
+
+        {% if not post.comment_count and post.is_commentable and post.is_visible %}
+            <div class="post-comments-title">
+                <a href="#comments" class="post-comments-count">
+                    Аргументируйте первым 👇
+                </a>
+            </div>
+        {% endif %}
+
+        {% if comments %}
+            <div class="post-comments-list">
+                {% include "comments/list.html" with comments=comments reply_form=reply_form type="battle" %}
+            </div>
+        {% endif %}
+
+        {% if me and post.is_commentable and post.is_visible or me.is_moderator %}
+            <div class="post-comments-form">
+                {% include "comments/forms/battle.html" with post=post form=comment_form %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="battle-etiquette">
+        <strong>Этикет батлов:</strong>
+        <ul>
+            <li>Батл — это схватка двух крайностей. Мы пытаемся выделить аргументы каждой из сторон чтобы потом по ним составить свою картину мира. Рекомендуется избегать аргументов типа «каждый хорош для своего».</li>
+            <li>Один аргумент — один комментарий. Не делайте списков, так сложнее вести дискуссию и подсчитывать статистику.</li>
+            <li>Можно топить как за одну, так и за обе стороны сразу. Просто выберите за кого вы при постинге.</li>
+            <li>На аргументы можно реплаить. Реплаи никуда не засчитываются и нужны только для срача.</li>
+            <li>Авторам батлов разрешено удалять повторы и комментарии не по формату.</li>
+        </ul>
+    </div>
+{% endblock %}
