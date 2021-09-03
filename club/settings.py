@@ -56,7 +56,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.de /godmode/dev_login/bug",
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "club.context_processors.settings_processor",
                 "club.context_processors.data_processor",
