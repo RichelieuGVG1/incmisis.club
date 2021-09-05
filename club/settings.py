@@ -154,7 +154,7 @@ APP_HOST = os.environ.get("APP_HOST") or "http://127.0.0.1:8000"
 APP_NAME = "Вастрик.Клуб"
 APP_DESCRIPTION = "Всё интересное происходит за закрытыми дверями"
 LAUNCH_DATE = datetime(2020, 4, 13)
-https://github.com/incmisis/incmisis.club
+# https://github.com/incmisis/incmisis.club
 AUTH_CODE_LENGTH = 6
 AUTH_CODE_EXPIRATION_TIMEDELTA = timedelta(minutes=15)
 AUTH_MAX_CODE_TIMEDELTA = timedelta(hours=1)
