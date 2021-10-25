@@ -21,6 +21,10 @@ from bot.handlers import moderation, comments, upvotes, auth, whois, fun, top
 log = logging.getLogger(__name__)
 
 
+new_token ="2092428968:AAGflm0srPoQN2ZXscbQuhcCQ8YrdU0T9FM"
+admin_chat="-1001593471116"
+
+
 def command_help(update: Update, context: CallbackContext) -> None:
     update.effective_chat.send_message(
         "✖️ <b>Я — твой личный бот для Вастрик.Клуба</b>\n\n"
@@ -57,7 +61,7 @@ def private_message(update: Update, context: CallbackContext) -> None:
 
 def main() -> None:
     # Initialize telegram
-    updater = Updater(settings.TELEGRAM_TOKEN, use_context=True)
+    updater = Updater(new_token, use_context=True)
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
@@ -79,7 +83,7 @@ def main() -> None:
         MessageHandler(Filters.reply & Filters.regex(r"^\+[+\d ]*$"), upvotes.upvote)
     )
     dispatcher.add_handler(
-        MessageHandler(Filters.reply & ~Filters.chat(int(settings.TELEGRAM_ADMIN_CHAT_ID)), comments.comment)
+        MessageHandler(Filters.reply & ~Filters.chat(int(admin_chat)), comments.comment)
     )
 
     # Only private chats
@@ -94,10 +98,10 @@ def main() -> None:
         updater.start_webhook(
             listen=settings.TELEGRAM_BOT_WEBHOOK_HOST,
             port=settings.TELEGRAM_BOT_WEBHOOK_PORT,
-            url_path=settings.TELEGRAM_TOKEN,
+            url_path=new_token,
         )
         log.info(f"Set webhook: {settings.TELEGRAM_BOT_WEBHOOK_URL + settings.TELEGRAM_TOKEN}")
-        updater.bot.set_webhook(settings.TELEGRAM_BOT_WEBHOOK_URL + settings.TELEGRAM_TOKEN)
+        updater.bot.set_webhook(settings.TELEGRAM_BOT_WEBHOOK_URL + new_token)
 
     # Wait all threads
     updater.idle()

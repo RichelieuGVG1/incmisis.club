@@ -1,0 +1,8 @@
+cd "C:\Program Files\Docker\Docker"
+.\DockerCli.exe -SwitchDaemon
+
+
+cd C:\Users\RichelieuGVG\Desktop\incmisis.club
+docker compose up
+
+http://localhost:8000/
