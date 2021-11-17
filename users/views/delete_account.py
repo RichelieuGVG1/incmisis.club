@@ -80,7 +80,7 @@ def confirm_delete_account(request, user_slug):
     async_task(
         send_telegram_message,
         chat=ADMIN_CHAT,
-        text=f"💀 Юзер удалился: {settings.APP_HOST}/user/{user.slug}/",
+        text=f"💀 Пользователь удалился: {settings.APP_HOST}/user/{user.slug}/",
     )
 
     # an actual deletion will be done in a cron task ("manage.py delete_users")

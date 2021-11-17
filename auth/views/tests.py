@@ -170,7 +170,7 @@ class ViewEmailLoginTests(TestCase):
     def test_login_user_not_exist(self):
         response = self.client.post(reverse('email_login'),
                                     data={'email_or_login': 'not-existed@user.com', })
-        self.assertContains(response=response, text="Такого юзера нет 🤔", status_code=200)
+        self.assertContains(response=response, text="Такого пользователя нет 🤔", status_code=200)
 
     def test_secret_hash_login(self):
         response = self.client.post(reverse('email_login'),
@@ -183,7 +183,7 @@ class ViewEmailLoginTests(TestCase):
     def test_secret_hash_user_not_exist(self):
         response = self.client.post(reverse('email_login'),
                                     data={'email_or_login': 'not-existed@user.com|-xxx', })
-        self.assertContains(response=response, text="Такого юзера нет 🤔", status_code=200)
+        self.assertContains(response=response, text="Такого пользователя нет 🤔", status_code=200)
 
     @skip("todo")
     def test_secret_hash_cancel_user_deletion(self):

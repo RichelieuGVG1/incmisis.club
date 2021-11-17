@@ -26,7 +26,7 @@ def delete_user_data(user: User):
     user.is_email_unsubscribed = True
     user.is_email_verified = False
     user.moderation_status = User.MODERATION_STATUS_DELETED
-    user.full_name = "💀 Юзер Удалился"
+    user.full_name = "💀 Пользователь удалился"
     user.avatar = None
     user.company = None
     user.position = None

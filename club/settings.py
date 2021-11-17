@@ -210,10 +210,10 @@ MAILGUN_API_URI = "https://api.eu.mailgun.net/v3/incmisis.ru"
 MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
 MAILGUN_EMAIL_FROM = "Inc Club <club@incmisis.ru>"
 
-MEDIA_UPLOAD_URL = "http://0.0.0.0:8118/upload/multipart/"
+MEDIA_UPLOAD_URL = "http://127.0.0.1:8118/upload/multipart/"
 MEDIA_UPLOAD_CODE = os.getenv("MEDIA_UPLOAD_CODE")
 VIDEO_EXTENSIONS = {"mp4", "mov", "webm"}
-IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
+IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_BOT_URL = os.getenv("TELEGRAM_BOT_URL")

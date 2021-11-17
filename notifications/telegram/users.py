@@ -31,7 +31,7 @@ def notify_profile_needs_review(user, intro):
                 telegram.InlineKeyboardButton("❌️ Слишком общее", callback_data=f"reject_user_general:{user.id}"),
             ],
             [
-                telegram.InlineKeyboardButton("✏️ Написать юзеру", url=admin_profile_url),
+                telegram.InlineKeyboardButton("✏️ Написать пользователю", url=admin_profile_url),
             ]
         ])
     )
@@ -44,7 +44,7 @@ def notify_user_profile_approved(user):
         send_telegram_message(
             chat=Chat(id=user.telegram_id),
             text=f"🚀 Подравляем, вы прошли модерацию. Добро пожаловать в Клуб!"
-                 f"\n\nМожно пойти заполнить другие смешные поля в профиле:"
+                 f"\n\nТеперь вы можете полностью заполнить ваш профиль:"
                  f"\n\n{user_profile_url}"
         )
 
@@ -74,7 +74,7 @@ def notify_admin_user_ping(user, message):
     if user.telegram_id:
         send_telegram_message(
             chat=ADMIN_CHAT,
-            text=f"🛎 <b>Юзера {user.slug} пинганули:</b> {message}"
+            text=f"🛎 <b>пользователя {user.slug} пинганули:</b> {message}"
         )
 
 
@@ -82,7 +82,7 @@ def notify_admin_user_unmoderate(user):
     if user.telegram_id:
         send_telegram_message(
             chat=ADMIN_CHAT,
-            text=f"💣 <b>Юзера {user.slug} размодерировали</b>"
+            text=f"💣 <b>пользователя {user.slug} размодерировали</b>"
         )
 
 

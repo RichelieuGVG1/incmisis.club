@@ -24,14 +24,14 @@ class NotFound(ClubException):
 
 class AccessDenied(ClubException):
     default_code = "access-forbidden"
-    default_title = "Вам сюда нельзя"
-    default_message = "Атата"
+    default_title = "Вам сюда нельзя!"
+    default_message = "Даже не пытайтесь"
 
 
 class RateLimitException(ClubException):
     default_code = "rate-limit"
-    default_title = "Вы создали слишком много постов или комментов сегодня"
-    default_message = "Пожалуйста, остановитесь"
+    default_title = "Вы создали слишком много постов или комментариев сегодня"
+    default_message = "Пожалуйста, остановитесь!"
 
 
 class ContentDuplicated(ClubException):

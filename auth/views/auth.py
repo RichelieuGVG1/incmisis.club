@@ -67,7 +67,7 @@ def logout(request):
 
 def debug_dev_login(request):
     if not (settings.DEBUG or settings.TESTS_RUN):
-        raise AccessDenied(title="Эта фича доступна только при DEBUG=true")
+        raise AccessDenied(title="Куда лезешь, смертный? Тебе сюда нельзя")
 
     user, is_created = User.objects.get_or_create(
         slug="dev",
@@ -75,9 +75,9 @@ def debug_dev_login(request):
             patreon_id="123456",
             membership_platform_type=User.MEMBERSHIP_PLATFORM_PATREON,
             email="dev@dev.dev",
-            full_name="Senior 23 y.o. Developer",
-            company="FAANG",
-            position="Team Lead конечно",
+            full_name="Главный разработчик",
+            company="incmisis Club",
+            position="Ген. директор",
             balance=10000,
             membership_started_at=datetime.utcnow(),
             membership_expires_at=datetime.utcnow() + timedelta(days=365 * 100),
@@ -99,7 +99,7 @@ def debug_dev_login(request):
 
 def debug_random_login(request):
     if not (settings.DEBUG or settings.TESTS_RUN):
-        raise AccessDenied(title="Эта фича доступна только при DEBUG=true")
+        raise AccessDenied(title="Куда лезешь, смертный? Тебе сюда нельзя")
 
     slug = "random_" + random_string()
     user, is_created = User.objects.get_or_create(
@@ -122,7 +122,7 @@ def debug_random_login(request):
     )
 
     if is_created:
-        Post.upsert_user_intro(user, "Интро как интро, аппрув прошло :Р", is_visible=True)
+        Post.upsert_user_intro(user, "Хорошее интро, мы его одобрили! Так держать, боец!", is_visible=True)
 
     session = Session.create_for_user(user)
 

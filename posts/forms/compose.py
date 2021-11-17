@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
         queryset=Topic.objects.filter(is_visible=True).all(),
     )
     is_public = forms.BooleanField(
-        label="Виден ли в большой интернет?",
+        label="Виден ли в большом интернете?",
         initial=False,
         required=False
     )
@@ -51,7 +51,7 @@ class PostTextForm(PostForm):
             attrs={
                 "maxlength": 500000,
                 "class": "markdown-editor-full",
-                "placeholder": "Дорогой Мартин Алексеевич…"
+                "placeholder": "Дорогой Николай Алексеевич..."
             }
         ),
     )

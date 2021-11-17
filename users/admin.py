@@ -88,7 +88,7 @@ def do_user_admin_actions(request, user, data):
         # notify admins
         send_telegram_message(
             chat=ADMIN_CHAT,
-            text=f"💀 Юзер был удален админами: {settings.APP_HOST}/user/{user.slug}/",
+            text=f"💀 Пользователь был удален админами: {settings.APP_HOST}/user/{user.slug}/",
         )
 
     # Ping

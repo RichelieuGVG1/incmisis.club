@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Error {{ Code }}{% endblock %}
+
+{% block main %}
+    <div class="logo">
+        <a href="/"><img src="/static/images/logo.png">&nbsp;PEPIC</a>
+    </div>
+
+    <div class="block error">
+        <div>
+            <div class="error-title">{{ Code }}</div>
+            <div class="error-message">{{ Message }}</div>
+        </div>
+    </div>
+{% endblock %}
