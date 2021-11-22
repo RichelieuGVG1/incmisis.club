@@ -8,7 +8,7 @@ services:
     command: make docker-run-dev
     container_name: club_app
     environment:
-      - DEBUG=true
+      - DEBUG=true                                                  #DEBUGGING
       - PYTHONUNBUFFERED=1
       - POSTGRES_DB=vas3k_club
       - POSTGRES_USER=postgres
@@ -33,7 +33,7 @@ services:
       context: .
     command: make docker-run-queue
     environment:
-      - DEBUG=true
+      - DEBUG=true                                                  #DEBUGGING
       - PYTHONUNBUFFERED=1
       - POSTGRES_DB=vas3k_club
       - POSTGRES_USER=postgres
@@ -54,7 +54,7 @@ services:
       context: .
     command: make docker-run-bot
     environment:
-      - DEBUG=true
+      - DEBUG=true                                                 #DEBUGGING
       - PYTHONUNBUFFERED=1
       - POSTGRES_DB=vas3k_club
       - POSTGRES_USER=postgres

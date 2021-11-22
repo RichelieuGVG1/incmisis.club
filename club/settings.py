@@ -151,7 +151,7 @@ LANDING_CACHE_TIMEOUT = 60 * 60 * 24
 # App
 
 APP_HOST = os.environ.get("APP_HOST") or "http://127.0.0.1:8000"
-APP_NAME = "Вастрик.Клуб"
+APP_NAME = "Inc MISIS Club"
 APP_DESCRIPTION = "Всё интересное происходит за закрытыми дверями"
 LAUNCH_DATE = datetime(2020, 4, 13)
 # https://github.com/incmisis/incmisis.club
@@ -174,7 +174,7 @@ GDPR_ARCHIVE_URL = "/downloads/"
 GDPR_ARCHIVE_REQUEST_TIMEDELTA = timedelta(hours=6)
 GDPR_ARCHIVE_DELETE_TIMEDELTA = timedelta(hours=24)
 GDPR_DELETE_CODE_LENGTH = 14
-GDPR_DELETE_CONFIRMATION = "я готов удалиться навсегда"
+GDPR_DELETE_CONFIRMATION = "Я готов удалиться навсегда"
 GDPR_DELETE_TIMEDELTA = timedelta(hours=5 * 24)
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
@@ -210,7 +210,7 @@ MAILGUN_API_URI = "https://api.eu.mailgun.net/v3/incmisis.ru"
 MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
 MAILGUN_EMAIL_FROM = "Inc Club <club@incmisis.ru>"
 
-MEDIA_UPLOAD_URL = "http://127.0.0.1:8118/upload/multipart/"
+MEDIA_UPLOAD_URL = "http://localhost:8118/upload/multipart/"
 MEDIA_UPLOAD_CODE = os.getenv("MEDIA_UPLOAD_CODE")
 VIDEO_EXTENSIONS = {"mp4", "mov", "webm"}
 IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}

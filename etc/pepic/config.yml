@@ -4,7 +4,7 @@ global:
   base_url: "http://0.0.0.0:8118/"  # trailing slash is important
   secret_code: "0ffb45a273503f706f15e8fa90092506a01b80965f541d44e0b2e69109357bd9" # secret word to protect you from strangers (don't use your password here, it's stored as plain text)
   max_upload_size: "500M" # number + K, M, G, T or P
-  file_tree_split_chars: 3 # abcde.jpg -> ab/cd/e.jpg (never change this after release!)
+  #file_tree_split_chars: 3 # abcde.jpg -> ab/cd/e.jpg (never change this after release!)
 
 storage:
   type: fs
