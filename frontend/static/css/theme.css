@@ -43,14 +43,14 @@ html, html[theme="light"] {
 }
 
 html[theme="dark"] {
-    --bg-color: #282c35;
+    --bg-color: #15171F;
     --opposite-bg-color: #FCFDFF;
 
     --text-color: #DDD;
     --brighter-text-color: #FFF;
     --opposite-text-color: #333;
 
-    --block-bg-color: #1B1B1C;
+    --block-bg-color: #2A2C37;
     --opposite-block-bg-color: #FFF;
     --block-shadow: 0px 0px 0px #000;
     --block-border: solid 1px #FCFDFF;
@@ -80,7 +80,7 @@ html[theme="dark"] {
         --brighter-text-color: #FFF;
         --opposite-text-color: #333;
 
-        --block-bg-color: #1B1B1C;
+        --block-bg-color: #2A2C37;
         --opposite-block-bg-color: #FFF;
         --block-shadow: 0px 0px 0px #000;
         --block-border: solid 1px #FCFDFF;

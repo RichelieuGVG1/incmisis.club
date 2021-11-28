@@ -12,16 +12,9 @@
 
             <div class="block-description" style="max-width: 100%;">
                 <p>
-                    Добро пожаловать в Клуб.
+                    Добро пожаловать в Клуб!
                 </p>
 
-                <p>
-                    Ваш аккаунт создан и вы можете залетать к нам в <a href="{% url "network" %}" rel="noreferrer" target="_blank">секретные чаты</a>, подписываться на <a href="{{ settings.TELEGRAM_CLUB_CHANNEL_URL }}" rel="noreferrer" target="_blank">канал</a> и читать закрытые <a href="https://vas3k.ru/blog/" rel="noreferrer" target="_blank">посты в блоге</a>.
-                </p>
-
-                <p>
-                    Но чтобы пустить вас в сам Клуб, нам надо сначала познакомиться. Открытые дружеские отношения и отсутствие оголтелых анонимусов &mdash; залог здорового и недушного коммьюнити.
-                </p>
 
                 <p>
                     Для начала прочитайте <a href="{% url "docs" "about" %}">наши правила</a>. Потом налейте себе вина и заполните форму ниже.
@@ -91,7 +84,7 @@
                 </label>
                 {{ form.bio }}
                 {% if form.bio.errors %}<span class="form-row-errors">{{ form.bio.errors }}</span>{% endif %}
-                <span class="form-row-help">Всё, что вы бы хотели видеть в профиле под своим именем. Ссылки на ваш блог, твиттер, канал, подкаст, приветы маме, и т.д. Свободный формат. Используйте Эмодзи и <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a> чтобы сделать красиво.</span>
+                <span class="form-row-help">Всё, что вы бы хотели видеть в профиле под своим именем. Ссылки на ваш блог, канал, подкаст, приветы маме, и т.д. Свободный формат. Используйте Эмодзи и <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a> чтобы сделать красиво.</span>
             </div>
 
             <div class="form-row">
@@ -143,18 +136,16 @@
                     Теперь самая важная часть — написание #intro!
                 </p>
                 <p>
-                    Расскажите в нескольких абзацах откуда вы, где работаете, чем увлекаетесь по жизни и о чем мечтаете.
+                    Расскажите в нескольких абзацах откуда вы, на каком факультете учитесь, чем увлекаетесь по жизни и о чем мечтаете.
                     Неформально — мы же знакомимся, а не проводим собеседование.
-                    Представьте, что я спросил вас об этом в баре за кружечкой пива или кофе.
+                    Представьте, что я спросил вас об этом в баре за кружкой доброго баварского пива.
                 </p>
                 <p>
                     <strong>Ваше интро станет видно всем</strong> — оно попадёт на главную и будет вашим первым постом в Клубе.
-                    Это помогает новичкам быстро влиться в коммьюнити и найти единомышленников.
+                    Это помогает новичкам быстро влиться в сообщество и найти единомышленников.
                     Но сначала <strong>его прочитает модератор, чтобы вы не попытались нас всех обмануть</strong>.
                 </p>
-                <p>
-                    Вот примеры хороших интро: <a href="https://vas3k.club/intro/vas3k/" target="_blank">Вастрик</a>, <a href="https://vas3k.club/intro/lena/">Лена</a>, <a href="https://vas3k.club/intro/Sciannadev/" target="_blank">Анна</a>.
-                </p>
+                
             </div>
 
             <div class="form-row form-row-intro">
@@ -226,22 +217,20 @@
             <div class="clearfix20"></div>
 
             <div class="block network-block" id="main">
-                <div class="network-channels">
+                
+                <div class="network-channels2" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+
                     <a href="{{ settings.TELEGRAM_CLUB_CHANNEL_URL }}" rel="noreferrer" target="_blank" class="network-channel">
                         <span class="avatar network-channel-icon" style="background-image: url('https://i.vas3k.club/eab0c7350e8159ec630d820b430e41ac4ad9a7533b7e5cbb931618e8d6e70233.jpg');"></span>
                         <span class="network-channel-name text-120">Телеграм-канал Клуба</span>
                         <span class="network-channel-description">Лучшие посты, отобранные руками</span>
                     </a>
 
-                    <a href="https://twitter.com/vas3k_club" target="_blank" class="network-channel">
-                        <span class="avatar network-channel-icon" style="background-image: url('https://i.vas3k.club/9d12a3d9dd99fecbc9eb7b76174ed7bcc0328989103c80439aaeb725b3c68ee7.jpg');"></span>
-                        <span class="network-channel-name text-120">Твиттер-фид</span>
-                        <span class="network-channel-description">Бездушная машина постит ссылки на новые посты</span>
-                    </a>
+                    
 
                     <a href="{{ settings.TELEGRAM_CLUB_CHAT_URL }}" rel="noreferrer" target="_blank" class="network-channel">
                         <span class="avatar network-channel-icon" style="background-image: url('https://i.vas3k.club/b8c8cc57c58470a1ea7633b53e5f8014a7d9ad638169c440a3cfc6ff6a89da59.jpg');"></span>
-                        <span class="network-channel-name text-120">Вастрик.Бар</span>
+                        <span class="network-channel-name text-120">INCMISIS.Бар</span>
                         <span class="network-channel-description">Главный чат Клуба (там бывает шумно)</span>
                     </a>
 

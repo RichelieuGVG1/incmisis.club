@@ -74,7 +74,7 @@ def unpublish_post(request, post_slug):
             raise AccessDenied(
                 title="Только модератор может полностью удалить этот пост",
                 message=f"Так как в нём уже больше {settings.MAX_COMMENTS_FOR_DELETE_VS_CLEAR} комментов "
-                        f"и некоторые из них могут быть ценны их авторам и коммьюнити в целом"
+                        f"и некоторые из них могут быть ценны их авторам и сообщество в целом"
             )
 
     post.unpublish()
