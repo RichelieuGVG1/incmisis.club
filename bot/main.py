@@ -21,8 +21,8 @@ from bot.handlers import moderation, comments, upvotes, auth, whois, fun, top
 log = logging.getLogger(__name__)
 
 
-new_token ="2092428968:AAGflm0srPoQN2ZXscbQuhcCQ8YrdU0T9FM"
-admin_chat="-1001593471116"
+new_token =os.getenv("TELEGRAM_TOKEN")
+admin_chat=os.getenv("TELEGRAM_ID_ADMIN_CHAT")
 
 
 def command_help(update: Update, context: CallbackContext) -> None:
