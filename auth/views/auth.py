@@ -34,7 +34,9 @@ def reg(request):
 
     user.save()
 
-    return render(request, "auth/login.html")
+    return render(request, "auth/email.html")
+    
+
 
 
 
