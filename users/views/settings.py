@@ -90,7 +90,7 @@ def edit_notifications(request, user_slug):
 
     return render(request, "users/edit/notifications.html", {"form": form, "user": user})
 
-"""
+
 @auth_required
 def edit_payments(request, user_slug):
     if user_slug == "me":
@@ -117,7 +117,7 @@ def edit_payments(request, user_slug):
                 amount=int(s["plan"]["amount"] / 100),
                 interval=s["plan"]["interval"],
             ) for s in stripe_subscriptions["data"]]
-        except stripe.error.InvalidRequestError:
+        except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError):
             subscriptions = []
 
     return render(request, "users/edit/payments.html", {
@@ -125,7 +125,7 @@ def edit_payments(request, user_slug):
         "subscriptions": subscriptions,
         "top_users": top_users,
     })
-"""
+
 
 @auth_required
 def edit_bot(request, user_slug):

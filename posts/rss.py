@@ -4,7 +4,7 @@ from posts.models.post import Post
 
 
 class NewPostsRss(Feed):
-    title = "INCMISIS.Club: Новые посты"
+    title = "Вастрик.Клуб: Новые посты"
     link = "/posts.rss"
     description = ""
     limit = 20

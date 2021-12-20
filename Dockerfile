@@ -1,23 +1,28 @@
-FROM alpine:edge AS builder
+FROM ubuntu:20.04
+ENV MODE dev
+ENV DEBIAN_FRONTEND=noninteractive
 
-ENV GOOS=linux
-ENV CGO_CFLAGS_ALLOW="-Xpreprocessor"
+RUN apt-get update \
+    && apt-get install --no-install-recommends -yq \
+      python3 \
+      python3-pip \
+      libpq-dev \
+      gdal-bin \
+      libgdal-dev \
+      make \
+      npm \
+      cron \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apk add --no-cache go gcc g++ vips-dev
-COPY . /build
-WORKDIR /build
-RUN go get
-RUN go build -a -o /build/app -ldflags="-s -w -h" .
-
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates mailcap ffmpeg vips
-COPY --from=builder /build/app /app/pepic
-COPY html /app/html
-COPY static /app/static
-COPY etc/pepic /etc/pepic
 WORKDIR /app
 
-EXPOSE 8118
+COPY . /app
+COPY etc/crontab /etc/crontab
+RUN chmod 600 /etc/crontab
 
-ENTRYPOINT ["/app/pepic", "serve", "--config", "/etc/pepic/config.yml"]
+RUN cd frontend && npm install && npm run build && cd ..
+
+RUN pip3 install pipenv==2021.5.29
+RUN sh -c 'if [ "$MODE" = 'production' ]; then pipenv lock --keep-outdated --requirements > requirements.txt; fi'
+RUN sh -c 'if [ "$MODE" = 'dev' ]; then pipenv lock --dev --requirements > requirements.txt; fi'
+RUN pip3 install -r requirements.txt

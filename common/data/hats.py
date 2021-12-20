@@ -1,13 +1,7 @@
 HATS = {
-    "moderator": {
-        "title": "Модератор",
-        "icon": None,
+    "team": {
+        "title": "Команда Клуба",
+        "icon": "✖",
         "color": "#000000"
-    },
-    "inventor": {
-        "title": "Отец-основатель",
-        "icon": None,
-        "color": "#ffd82b"
     }
-
 }

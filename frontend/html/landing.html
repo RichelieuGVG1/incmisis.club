@@ -4,7 +4,7 @@
 {% load render_bundle from webpack_loader %}
 <html lang="ru" theme="dark">
 <head>
-    <title>{% block title %}INCMISIS.Club ✖️‍{% endblock %}</title>
+    <title>{% block title %}Вастрик.Клуб ✖️‍{% endblock %}</title>
     {% block fonts %}
         {% include "common/fonts.html" %}
     {% endblock %}
@@ -24,7 +24,7 @@
         <div class="landing-block landing-block-limited">
             <img src="{% static "images/logo/logo-1024.png" %}" alt="">
             <div class="landing-title">
-                <h1>МИСИС&nbsp;БЛЕАТЬ</h1>
+                <h1>Вастрик.Клуб</h1>
                 <p>Всё самое интересное происходит за закрытыми дверями</p>
                 <a href="{% url "login" %}" class="button button-black">Войти</a>
             </div>
@@ -32,14 +32,15 @@
 
         <div class="landing-block landing-block-narrow" id="why">
             <div>
-                <h2>ЗАЧЕМ, а главное нахуя</h2>
+                <h2>ЗАЧЕМ</h2>
 
                 <p>
-                    Сидим, пиздим с умным видом
+                    Клуб — это наше закрытое и в меру айтишное сообщество, в котором мы делимся опытом вдали от большого интернета.
                 </p>
 
                 <p>
-                    Да просто хотим попиздеть за жизнь мисосовскую, че не ясно?
+                    Мы не считаем себя элитарными, у нас нет великой цели и прочей идейной хрени.
+                    Мы лишь собрались здесь чтобы наконец-то поговорить честно, открыто и без посторонних.
                 </p>
             </div>
         </div>
@@ -50,7 +51,7 @@
 
         <div class="landing-block landing-block-limited">
             <div class="landing-block-40">
-                <h3 class="feature-title">Хуй, залупа и<br>пизда</h3>
+                <h3 class="feature-title">Чужой опыт и инсайды</h3>
 
                 <ul class="feature-list">
                     <li>В Клубе пишут статьи, просят советов, делятся идеями и показывают пет-проджекты</li>
@@ -159,7 +160,7 @@
 
                 <ul class="feature-list">
                     <li>Сеть клубных чатиков в телеграме</li>
-                    <li>сообщество по городам и странам</li>
+                    <li>Коммьюнити по городам и странам</li>
                     <li>АМА с экспертами и отзывчивые участники</li>
                     <li>Место, в котором хорошо</li>
                 </ul>
@@ -178,9 +179,9 @@
                 <h3 class="feature-title">Движухи, фан и взаимопомощь</h3>
 
                 <ul class="feature-list">
-                    <li>Митапы и онлайн-сходки</li>
+                    <li>Митапы и сходки в офлайне</li>
                     <li>Коучинг и менторство между участниками Клуба</li>
-                    <li>У нас запрещена анонимность и действует жесткая модерация. Так мы сохраняем здоровое сообщество без говна</li>
+                    <li>У нас запрещена анонимность и действует жесткая модерация. Так мы сохраняем здоровое коммьюнити без говна</li>
                     <li>Подробнее о правилах можно почитать в разделе <a href="{% url "docs" "about" %}" target="_blank">О Клубе</a></li>
                 </ul>
             </div>
@@ -191,7 +192,7 @@
         </div>
 
         <div class="landing-block landing-block-limited landing-block-map-title" id="map">
-            <h3 class="feature-title">Вовлеченное сообщество</h3>
+            <h3 class="feature-title">Недушное коммьюнити</h3>
         </div>
 
         <div class="landing-block landing-block-map">
@@ -233,7 +234,7 @@
                 <img src="{% static "images/landing/dolor.png" %}" alt="$1" class="landing-dolor">
 
                 <p>
-                    Членство в Клубе БЕСплатное. И нам решительно поебать на всех.
+                    Членство в Клубе платное. Это позволяет нам оставаться независимыми от мнения инвесторов и рекламодателей.
                 </p>
 
                 <p>
@@ -253,9 +254,9 @@
 {% block footer %}
     <footer class="footer">
         <div class="footer-left" style="text-align: center; font-size: 130%;">
-            &copy; <a href="https://vas3k.ru" target="_blank">Inc.misis</a> {% now "Y" %}
+            &copy; <a href="https://vas3k.ru" target="_blank">Вастрик</a> {% now "Y" %}
             &nbsp;&nbsp;&nbsp;&infin;&nbsp;&nbsp;&nbsp;
-            <a href="{% url "docs" "contact" %}">Контакты</a><br><br>
+            <a href="{% url "docs" "contact" %}">Связаться с нами</a><br><br>
         </div>
     </footer>
 {% endblock %}

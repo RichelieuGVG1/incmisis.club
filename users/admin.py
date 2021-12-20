@@ -11,6 +11,7 @@ from notifications.email.users import send_unmoderated_email, send_banned_email,
     send_delete_account_confirm_email
 from notifications.telegram.common import send_telegram_message, ADMIN_CHAT
 from notifications.telegram.users import notify_user_ping, notify_admin_user_ping, notify_admin_user_unmoderate
+from payments.helpers import cancel_all_stripe_subscriptions
 from users.models.achievements import UserAchievement, Achievement
 from users.models.user import User
 
@@ -73,6 +74,9 @@ def do_user_admin_actions(request, user, data):
         user.membership_expires_at = datetime.utcnow()
         user.is_banned_until = datetime.utcnow() + timedelta(days=5000)
 
+        # cancel recurring payments
+        cancel_all_stripe_subscriptions(user.stripe_id)
+
         # mark user for deletion
         user.deleted_at = datetime.utcnow()
         user.save()
@@ -88,7 +92,7 @@ def do_user_admin_actions(request, user, data):
         # notify admins
         send_telegram_message(
             chat=ADMIN_CHAT,
-            text=f"💀 Пользователь был удален админами: {settings.APP_HOST}/user/{user.slug}/",
+            text=f"💀 Юзер был удален админами: {settings.APP_HOST}/user/{user.slug}/",
         )
 
     # Ping

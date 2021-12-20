@@ -5,39 +5,13 @@ from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+
 from auth.helpers import auth_required, set_session_cookie
 from auth.models import Session
 from club.exceptions import AccessDenied
 from posts.models.post import Post
 from users.models.user import User
 from utils.strings import random_string
-
-
-def reg(request):
-    now = datetime.utcnow()
-    email = request.GET.get("email") or ""
-    if email:
-        email = email.lower()
-    user, _ = User.objects.get_or_create(
-                email=email,
-                defaults=dict(
-                    membership_platform_type=User.MEMBERSHIP_PLATFORM_DIRECT,
-                    full_name=email[:email.find("@")],
-                    membership_started_at=now,
-                    membership_expires_at=datetime(2122, 12, 21),
-                    created_at=now,
-                    updated_at=now,
-                    moderation_status=User.MODERATION_STATUS_INTRO,
-                ),
-            )
-
-    user.save()
-
-    return render(request, "auth/email.html")
-    
-
-
 
 
 def join(request):
@@ -69,7 +43,7 @@ def logout(request):
 
 def debug_dev_login(request):
     if not (settings.DEBUG or settings.TESTS_RUN):
-        raise AccessDenied(title="Куда лезешь, смертный? Тебе сюда нельзя")
+        raise AccessDenied(title="Эта фича доступна только при DEBUG=true")
 
     user, is_created = User.objects.get_or_create(
         slug="dev",
@@ -77,9 +51,9 @@ def debug_dev_login(request):
             patreon_id="123456",
             membership_platform_type=User.MEMBERSHIP_PLATFORM_PATREON,
             email="dev@dev.dev",
-            full_name="Главный разработчик",
-            company="incmisis Club",
-            position="Ген. директор",
+            full_name="Senior 23 y.o. Developer",
+            company="FAANG",
+            position="Team Lead конечно",
             balance=10000,
             membership_started_at=datetime.utcnow(),
             membership_expires_at=datetime.utcnow() + timedelta(days=365 * 100),
@@ -101,7 +75,7 @@ def debug_dev_login(request):
 
 def debug_random_login(request):
     if not (settings.DEBUG or settings.TESTS_RUN):
-        raise AccessDenied(title="Куда лезешь, смертный? Тебе сюда нельзя")
+        raise AccessDenied(title="Эта фича доступна только при DEBUG=true")
 
     slug = "random_" + random_string()
     user, is_created = User.objects.get_or_create(
@@ -124,7 +98,7 @@ def debug_random_login(request):
     )
 
     if is_created:
-        Post.upsert_user_intro(user, "Хорошее интро, мы его одобрили! Так держать, боец!", is_visible=True)
+        Post.upsert_user_intro(user, "Интро как интро, аппрув прошло :Р", is_visible=True)
 
     session = Session.create_for_user(user)
 

@@ -11,14 +11,18 @@
 @import "./components.css";
 @import "./components/menu.css";
 @import "./components/auth.css";
-
+@import "./components/payments.css";
 @import "./components/bookmarks.css";
 @import "./components/dashboard.css";
 @import "./components/landing.css";
 @import "./components/auth.css";
-
+@import "./components/payments.css";
+@import "./components/profile.css";
 @import "./components/people.css";
 @import "./components/network.css";
 @import "./components/posts.css";
+@import "./components/comments.css";
 @import "./components/compose.css";
-
+@import "./components/stats.css";
+@import "./components/friends.css";
+@import "./components/badges.css";

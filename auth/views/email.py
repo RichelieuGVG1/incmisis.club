@@ -28,10 +28,10 @@ def email_login(request):
         user = User.objects.filter(email=email_part, secret_hash=secret_hash_part).first()
         if not user:
             return render(request, "error.html", {
-                "title": "Такого пользователя нет 🤔",
+                "title": "Такого юзера нет 🤔",
                 "message": "Пользователь с таким кодом не найден. "
-                           "Попробуйте авторизоваться по обычной почте или никнейму.",
-            })
+                           "Попробуйте авторизоваться по обычной почте или юзернейму.",
+            }, status=404)
 
         if user.deleted_at:
             # cancel user deletion
@@ -47,18 +47,16 @@ def email_login(request):
         user = User.objects.filter(Q(email=email_or_login.lower()) | Q(slug=email_or_login)).first()
         if not user:
             return render(request, "error.html", {
-                "title": "Такого пользователя нет 🤔",
+                "title": "Такого юзера нет 🤔",
                 "message": "Пользователь с такой почтой не найден в списке членов Клуба. "
                            "Попробуйте другую почту или никнейм. "
                            "Если совсем ничего не выйдет, напишите нам, попробуем помочь.",
-                "title1": "Может вы просто первый раз?",
-                "botton": '<div class="login-join"><a href="/join" class="button">Зарегистрироваться</a></div>'
-            })
+            }, status=404)
 
         code = Code.create_for_user(user=user, recipient=user.email, length=settings.AUTH_CODE_LENGTH)
         async_task(send_auth_email, user, code)
         async_task(notify_user_auth, user, code)
-        print(code.code)
+
         return render(request, "auth/email.html", {
             "email": user.email,
             "goto": goto,

@@ -1,14 +1,15 @@
-version: "3.8"
+version: "3.7"
 
 services:
   club_app: &app
     build:
-      dockerfile: dev.dockerfile
+      dockerfile: Dockerfile
       context: .
     command: make docker-run-dev
     container_name: club_app
     environment:
-      - DEBUG=true                                                  #DEBUGGING
+      - MODE=dev
+      - DEBUG=true
       - PYTHONUNBUFFERED=1
       - POSTGRES_DB=vas3k_club
       - POSTGRES_USER=postgres
@@ -29,11 +30,12 @@ services:
 
   queue:
     build:
-      dockerfile: dev.dockerfile
+      dockerfile: Dockerfile
       context: .
     command: make docker-run-queue
     environment:
-      - DEBUG=true                                                  #DEBUGGING
+      - MODE=dev
+      - DEBUG=true
       - PYTHONUNBUFFERED=1
       - POSTGRES_DB=vas3k_club
       - POSTGRES_USER=postgres
@@ -48,27 +50,29 @@ services:
       - postgres
       - redis
 
-  bot:
-    build:
-      dockerfile: dev.dockerfile
-      context: .
-    command: make docker-run-bot
-    environment:
-      - DEBUG=true                                                 #DEBUGGING
-      - PYTHONUNBUFFERED=1
-      - POSTGRES_DB=vas3k_club
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=postgres
-      - REDIS_DB=0
-      - REDIS_HOST=redis
-    restart: always
-    volumes:
-      - .:/app:delegated
-    depends_on:
-      - club_app
-      - postgres
-      - redis
+# Uncomment these lines if you want to test the bot locally
+#  bot:
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+#    command: make docker-run-bot
+#    environment:
+#      - MODE=dev
+#      - DEBUG=true
+#      - PYTHONUNBUFFERED=1
+#      - POSTGRES_DB=vas3k_club
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_HOST=postgres
+#      - REDIS_DB=0
+#      - REDIS_HOST=redis
+#    restart: always
+#    volumes:
+#      - .:/app:delegated
+#    depends_on:
+#      - club_app
+#      - postgres
+#      - redis
 
   postgres:
     image: postgres:11
@@ -78,14 +82,14 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=vas3k_club
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   redis:
     image: redis:alpine
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
-      - 6379:6379
+      - "6379:6379"
 
   webpack:
     image: node:14-slim
@@ -94,19 +98,3 @@ services:
     volumes:
       - .:/app:delegated
     working_dir: /app/frontend
-
-
-  pepic:
-    build: .
-    environment: # check out pepic/config/app.go for more env variables
-      - BASE_URL=http://localhost:8118/
-      - STORAGE_DIR=/uploads
-      - SECRET_CODE=wowsosecret
-      - IMAGE_ORIGINAL_LENGTH=1400
-      - MAX_UPLOAD_SIZE=100M
-    volumes:
-      - ./uploads:/uploads
-    ports:
-      - 8118:8118
-    user: "1000" # set your real uid (by default only root can read the uploaded files)
-    restart: unless-stopped

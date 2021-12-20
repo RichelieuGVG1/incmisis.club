@@ -1,13 +1,11 @@
-version: "3.7"
-
+version: "3"
 services:
   club_app: &app
-    build:
-      dockerfile: production.dockerfile
-      context: .
+    image: ghcr.io/vas3k/club:${GITHUB_SHA:-latest}
     command: make docker-run-production
     container_name: club_app
     environment:
+      - MODE=production
       - PYTHONUNBUFFERED=1
       - DEBUG=false
       - APP_HOST=https://vas3k.club
@@ -18,16 +16,21 @@ services:
       - POSTGRES_HOST=postgres
       - REDIS_DB=0
       - REDIS_HOST=redis
+      - EMAIL_HOST
+      - EMAIL_PORT
+      - DEFAULT_FROM_EMAIL
+    env_file:
+      - .env
     restart: always
     volumes:
-      - ./frontend/static:/app/frontend/static
+      - ./frontend/static:/tmp/static
       - ./gdpr/downloads:/app/gdpr/downloads
     depends_on:
       - postgres
       - redis
       - queue
     ports:
-      - "8814:8814"
+      - "127.0.0.1:8814:8814"
 
   queue:
     <<: *app
@@ -49,6 +52,16 @@ services:
     ports:
       - "8816:8816"
 
+  cron:
+    <<: *app
+    command: make docker-run-cron
+    container_name: club_cron
+    depends_on:
+      - club_app
+      - postgres
+      - redis
+    ports: []
+
   postgres:
     image: postgres:12
     container_name: club_postgres
@@ -60,7 +73,7 @@ services:
     volumes:
       - /home/vas3k/pgdata:/var/lib/postgresql/data:rw
     ports:
-      - "54333:5432"
+      - "127.0.0.1:54333:5432"
 
   redis:
     image: redis:alpine

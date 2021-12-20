@@ -28,42 +28,18 @@
 <section class="content">
     <article class="post post-type-post">
         <header class="post-header">
-            <div class="post-title">
+            <h1 class="post-title">
                 {{ post.prefix}}: {{ post.author.full_name | rutypography }}
-            </div>
+            </h1>
             <div class="post-data">
-                <div class="post-date">
-                    {{ post.effective_published_at|date:"j E Y" }}&nbsp;&nbsp;&nbsp;
-                    <i class="fas fa-eye"></i>&nbsp;{{ post.view_count }}&nbsp;&nbsp;&nbsp;
-                    {% if me %}
-                        <post-bookmark
-                            bookmark-url="{% url "toggle_post_bookmark" post.slug %}"
-                            {% if is_bookmark %}
-                                initial-is-bookmarked
-                            {% endif %}>
-                        </post-bookmark>
-                    {% endif %}
-
-                    {% if post.author == me or me.is_moderator %}
-                        <a href="{% url "edit_post" post.slug %}"><i class="fas fa-edit"></i>&nbsp;Править&nbsp;&nbsp;&nbsp;</a>
-                    {% endif %}
-                    {% include "posts/widgets/delete_restore.html" %}
-                    {% if me.is_moderator %}
-                        <a href="{% url "announce_post" post.slug %}"><i class="fas fa-bullhorn"></i></a>&nbsp;&nbsp;&nbsp;
-                        <a href="{% url "admin_post" post.slug %}"><i class="fas fa-tools"></i></a>
-                    {% endif %}
+                <div class="post-actions-line">
+                    {% include "posts/widgets/post_actions_line.html" %}
                 </div>
 
-                {% if post.label %}
-                    <div class="post-label">
-                        {% include "posts/widgets/label.html" with label=post.label %}
-                    </div>
-                {% endif %}
-
-                {% if post.image %}
-                    <div class="post-image">
-                        <img src="{{ post.image }}" alt="{{ post.title }}">
-                    </div>
+                {% if post.metadata.badges %}
+                    <a class="post-badges post-badges-center" href="{% url "profile_badges" post.author.slug %}">
+                        {% include "badges/widgets/badges.html" with badges=post.metadata.badges %}
+                    </a>
                 {% endif %}
             </div>
         </header>

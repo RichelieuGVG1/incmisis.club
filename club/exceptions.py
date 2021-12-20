@@ -24,14 +24,14 @@ class NotFound(ClubException):
 
 class AccessDenied(ClubException):
     default_code = "access-forbidden"
-    default_title = "Вам сюда нельзя!"
-    default_message = "Даже не пытайтесь"
+    default_title = "Вам сюда нельзя"
+    default_message = "Атата"
 
 
 class RateLimitException(ClubException):
     default_code = "rate-limit"
-    default_title = "Вы создали слишком много постов или комментариев сегодня"
-    default_message = "Пожалуйста, остановитесь!"
+    default_title = "Вы создали слишком много постов или комментов сегодня"
+    default_message = "Пожалуйста, остановитесь"
 
 
 class ContentDuplicated(ClubException):
@@ -39,6 +39,11 @@ class ContentDuplicated(ClubException):
     default_title = "Обнаружен дубликат!"
     default_message = "Кажется, вы пытаетесь опубликовать то же самое повторно. " \
                       "Проверьте всё ли в порядке."
+
+
+class InsufficientFunds(ClubException):
+    default_code = "insufficient-funds"
+    default_title = "Недостаточно средств"
 
 
 class URLParsingException(ClubException):
@@ -53,6 +58,11 @@ class InvalidCode(ClubException):
     default_message = "Введите или запросите его еще раз. Через несколько неправильных попыток коды удаляются"
 
 
+class ApiInsufficientFunds(ClubException):
+    default_code = "api-insufficient-funds"
+    default_title = "Недостаточно средств"
+
+
 class ApiException(ClubException):
     default_message = None
 
@@ -65,3 +75,4 @@ class ApiAuthRequired(ApiException):
 class ApiAccessDenied(ApiException):
     default_code = "api-access-denied"
     default_title = "Access Denied"
+

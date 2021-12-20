@@ -18,14 +18,22 @@
         position: relative;
     }
 
-    .post-date {
+    .post-actions-line {
         opacity: 0.6;
     }
 
-        .post-date a {
+        .post-actions-line a {
             display: inline-block;
             text-decoration: none;
         }
+
+        .post-actions-line-item {
+            padding-right: 15px;
+        }
+
+    .post-image {
+        margin-bottom: 50px;
+    }
 
     .post-text {
         position: relative;
@@ -37,6 +45,12 @@
         font-weight: lighter;
         opacity: 0.6;
         vertical-align: middle;
+    }
+
+    .post-inline-title {
+        margin: 0;
+        font-size: 28px;
+        display: inline-block;
     }
 
     .post-type-post {
@@ -60,6 +74,28 @@
             text-overflow: ellipsis;
             line-height: 1.3em;
             font-weight: 700;
+            margin: 0;
+        }
+
+        .post-title-link::before {
+            bottom: 0;
+            content: "";
+            left: 0;
+            overflow: hidden;
+            position: absolute;
+            right: 0;
+            top: 0;
+            white-space: nowrap;
+            z-index: 1;
+            border-radius: var(--block-border-radius);
+        }
+
+        .post-title-link:focus {
+            outline: none;
+        }
+
+        .block .post-title-link:focus::before {
+            box-shadow: 0 0 20px 0 var(--input-selection-color);
         }
 
             .post-type-post .post-edit-button {
@@ -70,28 +106,27 @@
                 top: -5px;
             }
 
-        .post-type-post .post-data {
-            padding-top: 20px;
-            padding-bottom: 0;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         .post-type-post .post-label {
             font-size: 180%;
             padding-bottom: 20px;
         }
 
-        .post-type-post .post-date {
-            display: block;
+        .post-type-post .post-actions-line {
+            padding-top: 20px;
             padding-bottom: 20px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .post-type-post .post-author {
             font-size: 110%;
             padding-bottom: 40px;
         }
+
+            .post-type-post .post-author .post {
+                padding-bottom: 5px;
+            }
 
             .post-type-post .post-author .avatar {
                 width: 30px;
@@ -101,6 +136,7 @@
         .post-type-post .post-image {
             max-height: 800px;
             padding-top: 40px;
+            overflow: hidden;
         }
 
         .post-type-post .upvote {
@@ -147,6 +183,11 @@
 
         .post-layout-block .post-info {
             padding-top: 7px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 10px;
         }
 
         .post-layout-block .post-footer {
@@ -159,8 +200,10 @@
                 padding-top: 10px;
             }
 
-        .post-layout-block .topic {
-            margin-bottom: 5px;
+        .post-layout-block .post-badges {
+            padding-top: 10px;
+            padding-bottom: 0;
+            font-size: 120%;
         }
 
     .post-type-battle {
@@ -168,7 +211,6 @@
         width: 100%;
         max-width: 100%;
     }
-
 
 .text-body {
     position: relative;
@@ -403,6 +445,15 @@
         max-width: 100%;
     }
 
+    @media only screen and (min-width : 1100px) {
+        .text-body-image-full {
+            max-width: none !important;
+            width: 160% !important;
+            position: relative;
+            left: -30%;
+        }
+    }
+
     .text-body big {
         font-size: 120%;
     }
@@ -478,12 +529,30 @@
 
         .text-body-type-comment h1,
         .text-body-type-comment h2 {
-            margin-top: 50px;
+            margin-top: 2em;
+            margin-bottom: 0.8em;
         }
 
         .text-body-type-comment h3,
         .text-body-type-comment h3 {
             margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .text-body-type-comment h1 {
+            font-size: 180%;
+        }
+
+        .text-body-type-comment h2 {
+            font-size: 160%;
+        }
+
+        .text-body-type-comment h3 {
+            font-size: 130%;
+        }
+
+        .text-body-type-comment h4 {
+            font-size: 110%;
         }
 
     .text-body > *:first-child {
@@ -491,15 +560,42 @@
         padding-top: 0;
     }
 
-.post-metadata {
-    font-size: 120%;
+.post-link {
+    color: var(--opposite-text-color);
+    background-color: var(--opposite-block-bg-color);
+    font-family: var(--sans-font);
+    font-weight: normal;
     margin: 40px auto 0;
+    padding: 30px !important;
 }
 
-    .post-metadata-title {
-        font-size: 120%;
-        padding: 10px 0 30px;
-        font-weight: 700;
+    .post-link-a {
+        display: block;
+        color: var(--opposite-text-color) !important;
+        width: 100%;
+        text-decoration: none;
+    }
+
+    .post-link-image {
+        margin-bottom: 15px;
+        background-color: var(--bg-color);
+    }
+
+    .post-link-title {
+        display: block;
+        font-size: 150%;
+        line-height: 1.3em;
+        padding-bottom: 15px;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    .post-link-url {
+        font-size: 90%;
+        line-height: 1.3em;
+        font-weight: 300;
+        display: block;
+        opacity: 0.6;
     }
 
 .battle-header {
@@ -516,7 +612,7 @@
 .battle-title-main{
 }
 
-    .battle-title-main .post-date {
+    .battle-title-main .post-actions-line {
         text-align: center;
     }
 
@@ -598,20 +694,6 @@
             .battle-stats-arguments strong {
                 font-weight: 700;
             }
-
-    .battle-etiquette {
-        font-size: 120%;
-        margin-top: 50px;
-    }
-
-        .battle-etiquette strong {
-            font-size: 110%;
-        }
-
-        .battle-etiquette li {
-            margin-top: 5px;
-            margin-bottom: 10px;
-        }
 
 .post-event {
     display: grid;
@@ -812,4 +894,24 @@
             .linked-posts-scroll {
                 padding-right: 10px;
             }
+        }
+
+.post-guide-rules {
+    max-width: var(--post-width);
+    margin: 0 auto;
+}
+
+    .post-guide-rules-header {
+        font-size: 170%;
+        line-height: 140%;
+        font-weight: 500;
+        padding-bottom: 10px;
+    }
+
+    .post-guide-rules-description {
+        font-size: 120%;
+    }
+
+        .post-guide-rules-description ul {
+            padding-left: 20px;
         }

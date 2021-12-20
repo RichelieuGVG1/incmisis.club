@@ -4,9 +4,9 @@ from datetime import datetime, timedelta
 import jwt
 from django.shortcuts import redirect, render, get_object_or_404
 
-from auth.models import Session, Apps
+from auth.models import Session
 from club import settings
-from club.exceptions import AccessDenied, ApiAuthRequired, ApiAccessDenied
+from club.exceptions import AccessDenied, ApiAuthRequired
 from users.models.user import User
 
 log = logging.getLogger(__name__)
@@ -75,6 +75,9 @@ def check_user_permissions(request, **context):
             and not request.path.startswith("/network/") \
             and not request.path.startswith("/messages/"):
 
+        if request.me.membership_expires_at < datetime.utcnow():
+            log.info("User membership expired. Redirecting to payments page...")
+            return redirect("membership_expired")
 
         if request.me.is_banned:
             log.info("User was banned. Redirecting to 'banned' page...")
@@ -108,17 +111,28 @@ def moderator_role_required(view):
     return wrapper
 
 
-def api_required(view):
+def curator_role_required(view):
     def wrapper(request, *args, **kwargs):
         if not request.me:
-            raise ApiAuthRequired()
+            return redirect("login")
+
+        if not request.me.is_curator:
+            raise AccessDenied()
 
         return view(request, *args, **kwargs)
 
     return wrapper
 
 
-def auth_switch(no, yes):
+def api_required(view):
+    def wrapper(request, *args, **kwargs):
+        if not request.me:
+            raise ApiAuthRequired()
+        return view(request, *args, **kwargs)
+    return wrapper
+
+
+def auth_switch(yes, no):
     def result(request, *args, **kwargs):
         is_authorized = request.me is not None
         if is_authorized:

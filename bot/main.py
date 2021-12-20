@@ -21,13 +21,9 @@ from bot.handlers import moderation, comments, upvotes, auth, whois, fun, top
 log = logging.getLogger(__name__)
 
 
-new_token =os.getenv("TELEGRAM_TOKEN")
-admin_chat=os.getenv("TELEGRAM_ID_ADMIN_CHAT")
-
-
 def command_help(update: Update, context: CallbackContext) -> None:
     update.effective_chat.send_message(
-        "✖️ <b>Я — твой личный бот для INCMISIS.Clubа</b>\n\n"
+        "✖️ <b>Я — твой личный бот для Вастрик.Клуба</b>\n\n"
         "Через меня можно отвечать на комменты и посты — просто напиши "
         "ответ реплаем на сообщение и я перепостю его в Клуб. "
         "Так можно общаться в комментах даже не открывая сайт.\n\n"
@@ -61,7 +57,7 @@ def private_message(update: Update, context: CallbackContext) -> None:
 
 def main() -> None:
     # Initialize telegram
-    updater = Updater(new_token, use_context=True)
+    updater = Updater(settings.TELEGRAM_TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
@@ -69,7 +65,7 @@ def main() -> None:
     # Admin callbacks
     dispatcher.add_handler(CallbackQueryHandler(moderation.approve_post, pattern=r"^approve_post:.+"))
     dispatcher.add_handler(CallbackQueryHandler(moderation.forgive_post, pattern=r"^forgive_post:.+"))
-    dispatcher.add_handler(CallbackQueryHandler(moderation.unpublish_post, pattern=r"^delete_post:.+"))
+    dispatcher.add_handler(CallbackQueryHandler(moderation.reject_post, pattern=r"^reject_post.+"))
     dispatcher.add_handler(CallbackQueryHandler(moderation.approve_user_profile, pattern=r"^approve_user:.+"))
     dispatcher.add_handler(CallbackQueryHandler(moderation.reject_user_profile, pattern=r"^reject_user.+"))
 
@@ -83,25 +79,26 @@ def main() -> None:
         MessageHandler(Filters.reply & Filters.regex(r"^\+[+\d ]*$"), upvotes.upvote)
     )
     dispatcher.add_handler(
-        MessageHandler(Filters.reply & ~Filters.chat(int(admin_chat)), comments.comment)
+        MessageHandler(Filters.reply & ~Filters.chat(int(settings.TELEGRAM_ADMIN_CHAT_ID)), comments.comment)
     )
 
     # Only private chats
+    dispatcher.add_handler(CommandHandler("start", auth.command_auth, Filters.private))
     dispatcher.add_handler(CommandHandler("auth", auth.command_auth, Filters.private))
     dispatcher.add_handler(MessageHandler(Filters.private, private_message))
 
     # Start the bot
     if settings.DEBUG:
         updater.start_polling()
-        # ^ polling is useful for development since you don't need to expose endpoints
+        # ^ polling is useful for development since you don't need to expose webhook endpoints
     else:
         updater.start_webhook(
             listen=settings.TELEGRAM_BOT_WEBHOOK_HOST,
             port=settings.TELEGRAM_BOT_WEBHOOK_PORT,
-            url_path=new_token,
+            url_path=settings.TELEGRAM_TOKEN,
         )
         log.info(f"Set webhook: {settings.TELEGRAM_BOT_WEBHOOK_URL + settings.TELEGRAM_TOKEN}")
-        updater.bot.set_webhook(settings.TELEGRAM_BOT_WEBHOOK_URL + new_token)
+        updater.bot.set_webhook(settings.TELEGRAM_BOT_WEBHOOK_URL + settings.TELEGRAM_TOKEN)
 
     # Wait all threads
     updater.idle()

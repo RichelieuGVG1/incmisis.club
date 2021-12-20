@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from uuid import uuid4
 
+from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import F
@@ -8,7 +9,7 @@ from django.db.models import F
 from users.models.geo import Geo
 from common.models import ModelDiffMixin
 from utils.slug import generate_unique_slug
-from utils.strings import random_hash
+from utils.strings import random_string
 
 
 class User(models.Model, ModelDiffMixin):
@@ -50,15 +51,13 @@ class User(models.Model, ModelDiffMixin):
         (MODERATION_STATUS_DELETED, MODERATION_STATUS_DELETED),
     ]
 
-    DEFAULT_AVATAR = "https://i.vas3k.club/v.png"
-
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     slug = models.CharField(max_length=32, unique=True)
 
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=128, null=False)
     avatar = models.URLField(null=True, blank=True)
-    secret_hash = models.CharField(max_length=16, db_index=True)
+    secret_hash = models.CharField(max_length=24, unique=True)
 
     company = models.TextField(null=True)
     position = models.TextField(null=True)
@@ -113,11 +112,11 @@ class User(models.Model, ModelDiffMixin):
         db_table = "users"
 
     def save(self, *args, **kwargs):
-        if not self.secret_hash:
-            self.secret_hash = random_hash(length=16)
-
         if not self.slug:
             self.slug = generate_unique_slug(User, self.full_name, separator="")
+
+        if not self.secret_hash:
+            self.secret_hash = self.slug[:6] + random_string(length=18)
 
         self.updated_at = datetime.utcnow()
         return super().save(*args, **kwargs)
@@ -146,11 +145,8 @@ class User(models.Model, ModelDiffMixin):
     def membership_days_left(self):
         return (self.membership_expires_at - datetime.utcnow()).total_seconds() // 60 // 60 / 24
 
-    def membership_months_left(self):
-        return self.membership_days_left() / 30
-
-    def membership_years_left(self):
-        return self.membership_days_left() / 365
+    def membership_created_days(self):
+        return (datetime.utcnow() - self.created_at).days
 
     def increment_vote_count(self):
         return User.objects.filter(id=self.id).update(upvotes=F("upvotes") + 1)
@@ -159,7 +155,7 @@ class User(models.Model, ModelDiffMixin):
         return User.objects.filter(id=self.id).update(upvotes=F("upvotes") - 1)
 
     def get_avatar(self):
-        return self.avatar or self.DEFAULT_AVATAR
+        return self.avatar or settings.DEFAULT_AVATAR
 
     @property
     def is_banned(self):
@@ -174,6 +170,10 @@ class User(models.Model, ModelDiffMixin):
     @property
     def is_moderator(self):
         return (self.roles and self.ROLE_MODERATOR in self.roles) or self.is_god
+
+    @property
+    def is_curator(self):
+        return (self.roles and self.ROLE_CURATOR in self.roles) or self.is_god
 
     @property
     def is_club_member(self):

@@ -12,11 +12,16 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv("SECRET_KEY") or "wow so secret"
-DEBUG = (os.getenv("DEBUG") == "true")  # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = (os.getenv("DEBUG") != "false")  # SECURITY WARNING: don't run with debug turned on in production!
 TESTS_RUN = True if os.getenv("TESTS_RUN") else False
 
 ALLOWED_HOSTS = ["*", "127.0.0.1", "localhost", "0.0.0.0", "vas3k.club"]
 INTERNAL_IPS = ["127.0.0.1"]
+
+ADMINS = [
+    ("admin", "club@vas3k.club"),
+    ("vas3k", "me@vas3k.ru"),
+]
 
 INSTALLED_APPS = [
     "django.contrib.staticfiles",
@@ -27,11 +32,13 @@ INSTALLED_APPS = [
     "bookmarks.apps.BookmarksConfig",
     "comments.apps.CommentsConfig",
     "landing.apps.LandingConfig",
+    "payments.apps.PaymentsConfig",
     "posts.apps.PostsConfig",
     "users.apps.UsersConfig",
     "notifications.apps.NotificationsConfig",
     "search.apps.SearchConfig",
     "gdpr.apps.GdprConfig",
+    "badges.apps.BadgesConfig",
     "simple_history",
     "django_q",
     "webpack_loader",
@@ -60,6 +67,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "club.context_processors.settings_processor",
                 "club.context_processors.data_processor",
+                "club.context_processors.features_processor",
                 "auth.context_processors.users.me",
                 "posts.context_processors.topics.topics",
             ]
@@ -68,6 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "club.wsgi.application"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGGING = {
     "version": 1,
@@ -148,17 +157,27 @@ CACHES = {
 
 LANDING_CACHE_TIMEOUT = 60 * 60 * 24
 
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "email-smtp.eu-central-1.amazonaws.com")
+EMAIL_PORT = os.getenv("EMAIL_PORT", 587)
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Вастрик.Клуб <club@vas3k.club>")
+
 # App
 
 APP_HOST = os.environ.get("APP_HOST") or "http://127.0.0.1:8000"
-APP_NAME = "Inc MISIS Club"
+APP_NAME = "Вастрик.Клуб"
 APP_DESCRIPTION = "Всё интересное происходит за закрытыми дверями"
 LAUNCH_DATE = datetime(2020, 4, 13)
-# https://github.com/incmisis/incmisis.club
+
 AUTH_CODE_LENGTH = 6
-AUTH_CODE_EXPIRATION_TIMEDELTA = timedelta(minutes=15)
-AUTH_MAX_CODE_TIMEDELTA = timedelta(hours=1)
-AUTH_MAX_CODE_COUNT = 5
+AUTH_CODE_EXPIRATION_TIMEDELTA = timedelta(minutes=10)
+AUTH_MAX_CODE_TIMEDELTA = timedelta(hours=3)
+AUTH_MAX_CODE_COUNT = 3
 AUTH_MAX_CODE_ATTEMPTS = 3
 
 DEFAULT_PAGE_SIZE = 70
@@ -166,15 +185,17 @@ SEARCH_PAGE_SIZE = 25
 PEOPLE_PAGE_SIZE = 18
 PROFILE_COMMENTS_PAGE_SIZE = 100
 PROFILE_POSTS_PAGE_SIZE = 30
+FRIENDS_PAGE_SIZE = 30
+PROFILE_BADGES_PAGE_SIZE = 50
 
-COMMUNITY_APPROVE_UPVOTES = 20
+COMMUNITY_APPROVE_UPVOTES = 35
 
 GDPR_ARCHIVE_STORAGE_PATH = os.getenv("GDPR_ARCHIVE_STORAGE_PATH") or os.path.join(BASE_DIR, "gdpr/downloads")
 GDPR_ARCHIVE_URL = "/downloads/"
 GDPR_ARCHIVE_REQUEST_TIMEDELTA = timedelta(hours=6)
 GDPR_ARCHIVE_DELETE_TIMEDELTA = timedelta(hours=24)
 GDPR_DELETE_CODE_LENGTH = 14
-GDPR_DELETE_CONFIRMATION = "Я готов удалиться навсегда"
+GDPR_DELETE_CONFIRMATION = "я готов удалиться навсегда"
 GDPR_DELETE_TIMEDELTA = timedelta(hours=5 * 24)
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
@@ -204,19 +225,23 @@ rVdFROm3nmAIATC/ui9Ex+tfuOkScYJ5OV1H1qXBckzRVwfOHF0IiJQP4EblLlvv
 c+Ha7cw3U+n6KI4idHLiwa0CAwEAAQ==
 -----END PUBLIC KEY-----"""
 JWT_ALGORITHM = "RS256"
-JWT_EXP_TIMEDELTA = timedelta(days=120)
 
-MAILGUN_API_URI = "https://api.eu.mailgun.net/v3/incmisis.ru"
-MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
-MAILGUN_EMAIL_FROM = "Inc Club <club@incmisis.ru>"
-
-MEDIA_UPLOAD_URL = "http://localhost:8118/upload/multipart/"
+MEDIA_UPLOAD_URL = "https://i.vas3k.club/upload/multipart/"
 MEDIA_UPLOAD_CODE = os.getenv("MEDIA_UPLOAD_CODE")
 VIDEO_EXTENSIONS = {"mp4", "mov", "webm"}
-IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}
+IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
+
+OG_IMAGE_GENERATOR_URL = "https://og.vas3k.club/preview"
+OG_IMAGE_DEFAULT = "https://vas3k.club/static/images/share.png"
+OG_MACHINE_AUTHOR_LOGO = "https://vas3k.club/static/images/the_machine_logo.png"
+OG_IMAGE_GENERATOR_DEFAULTS = {
+    "logo": "https://vas3k.club/static/images/logo/logo-white-text.png",
+    "op": 0.6,
+    "bg": "#FFFFFF",
+}
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-TELEGRAM_BOT_URL = os.getenv("TELEGRAM_BOT_URL")
+TELEGRAM_BOT_URL = os.getenv("TELEGRAM_BOT_URL") or "https://t.me/vas3k_club_bot"
 TELEGRAM_ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID")
 TELEGRAM_CLUB_CHANNEL_URL = os.getenv("TELEGRAM_CLUB_CHANNEL_URL")
 TELEGRAM_CLUB_CHANNEL_ID = os.getenv("TELEGRAM_CLUB_CHANNEL_ID")
@@ -234,6 +259,9 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET") or ""
 STRIPE_CANCEL_URL = APP_HOST + "/join/"
 STRIPE_SUCCESS_URL = APP_HOST + "/monies/done/?reference={CHECKOUT_SESSION_ID}"
 
+WEBHOOK_SECRETS = set(os.getenv("WEBHOOK_SECRETS", "").split(","))
+
+DEFAULT_AVATAR = "https://i.vas3k.club/v.png"
 COMMENT_EDITABLE_TIMEDELTA = timedelta(hours=24)
 COMMENT_DELETABLE_TIMEDELTA = timedelta(days=10 * 365)
 COMMENT_DELETABLE_BY_POST_AUTHOR_TIMEDELTA = timedelta(days=14)
@@ -241,18 +269,22 @@ RETRACT_VOTE_IN_HOURS = 3
 RETRACT_VOTE_TIMEDELTA = timedelta(hours=RETRACT_VOTE_IN_HOURS)
 RATE_LIMIT_POSTS_PER_DAY = 10
 RATE_LIMIT_COMMENTS_PER_DAY = 200
-
-POST_VIEW_COOLDOWN_PERIOD = timedelta(days=1)
-POST_HOTNESS_PERIOD = timedelta(days=5)
-
-MAX_COMMENTS_FOR_DELETE_VS_CLEAR = 10
+POST_VIEW_COOLDOWN_PERIOD = timedelta(days=1)  # how much time must pass before a repeat viewing of a post counts
+POST_HOTNESS_PERIOD = timedelta(days=5)  # time window for hotness recalculation script
+MAX_COMMENTS_FOR_DELETE_VS_CLEAR = 10  # number of comments after which the post cannot be deleted
+MIN_DAYS_TO_GIVE_BADGES = 35  # minimum "days" balance to buy and gift any badge
 CLEARED_POST_TEXT = "```\n" \
     "😥 Этот пост был удален самим автором и от него остались лишь комментарии участников. " \
-    "Если вы хотите приютить и развить эту тему как новый автор, напишите модераторам Клуба: moderator@incmisis.ru." \
+    "Если вы хотите приютить и развить эту тему как новый автор, напишите модераторам Клуба: moderator@vas3k.club." \
     "\n```"
 
 MODERATOR_USERNAME = "moderator"
 DELETED_USERNAME = "deleted"
+
+POSTING_GUIDE_URL = "https://vas3k.club/post/10447/"
+CHATS_GUIDE_URL = "https://vas3k.club/post/9542/"
+PEOPLE_GUIDE_URL = "https://vas3k.club/post/2584/"
+PARLIAMENT_GUIDE_URL = "https://vas3k.club/post/12870/"
 
 WEBPACK_LOADER = {
     "DEFAULT": {

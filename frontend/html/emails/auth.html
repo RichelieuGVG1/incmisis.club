@@ -66,7 +66,7 @@ ul {
     </p>
 
     <p>
-        <a href="{{ settings.APP_HOST }}{% url "email_login_code" %}?email={{ code.recipient }}&code={{ code.code }}" class="button">Войти в Клуб</a>
+        <a href="{{ settings.APP_HOST }}{% url "email_login_code" %}?email={{ code.recipient | urlencode }}&code={{ code.code }}" class="button">Войти в Клуб</a>
     </p>
 
     <p>
@@ -75,7 +75,7 @@ ul {
     </p>
 
     <p>
-        На заметку: эти коды доходят намного быстрее через телеграм-бота. Подключите его в своем профиле, если еще не сделали это.
+        Кстати, лайфхак, эти коды намного быстрее доходят через телеграм-бота. Подключите его в своем профиле, если еще не.
     </p>
 
     <br><br><br>
