@@ -46,7 +46,9 @@ urlpatterns = [
     path("auth/logout/", logout, name="logout"),
     path("auth/patreon/", patreon_login, name="patreon_login"),
     path("auth/patreon_callback/", patreon_oauth_callback, name="patreon_oauth_callback"),
+
     path("auth/email/", email_login, name="email_login"),
+    
     path("auth/email/code/", email_login_code, name="email_login_code"),
     path("auth/external/", external_login, name="external_login"),
 

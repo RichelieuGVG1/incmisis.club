@@ -23,7 +23,7 @@ type UploadResult struct {
 // Handles multipart upload
 func (h *PepicHandler) UploadMultipart(c echo.Context) error {
 	if _, err := h.checkSecretCode(c); err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Secret code required")
+		return echo.NewHTTPError(http.StatusUnauthorized, "Secret code requi")
 	}
 
 	form, err := c.MultipartForm()
@@ -63,7 +63,7 @@ func (h *PepicHandler) UploadMultipart(c echo.Context) error {
 // Handles raw bytes upload from body
 func (h *PepicHandler) UploadBodyBytes(c echo.Context) error {
 	if _, err := h.checkSecretCode(c); err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Secret code required")
+		return echo.NewHTTPError(http.StatusUnauthorized, "Secret code require")
 	}
 
 	var bytes []byte

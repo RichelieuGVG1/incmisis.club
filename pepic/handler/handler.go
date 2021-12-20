@@ -15,7 +15,7 @@ type PepicHandler struct {
 	Storage    storage.Storage
 }
 
-const SecretCodeKey = "code"
+const SecretCodeKey = "wowsosecret" //code
 const SecretCodeCookieTTL = 30 * 24 * time.Hour
 
 // Auth for poor people
@@ -38,7 +38,7 @@ func (h *PepicHandler) checkSecretCode(c echo.Context) (string, error) {
 		}
 
 		if code != config.App.Global.SecretCode {
-			return code, errors.New("secret code is invalid")
+			return code, errors.New("secret code is invalid!!!!")
 		}
 
 		newCookie := new(http.Cookie)
